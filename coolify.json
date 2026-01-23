@@ -1,0 +1,29 @@
+{
+  "deploymentType": "nodejs",
+  "name": "GCash MoneyPay",
+  "description": "Money transfer application with admin panel",
+  "ports": [
+    {
+      "port": 5002,
+      "protocol": "http"
+    }
+  ],
+  "buildCommand": "cd frontend && npm install && npm run build && cd ../backend && npm install",
+  "startCommand": "cd backend && npm run start",
+  "environment": {
+    "NODE_ENV": "production",
+    "PORT": "5002",
+    "DB_HOST": "${DB_HOST}",
+    "DB_PORT": "${DB_PORT}",
+    "DB_USER": "${DB_USER}",
+    "DB_PASSWORD": "${DB_PASSWORD}",
+    "DB_NAME": "${DB_NAME}",
+    "JWT_SECRET": "${JWT_SECRET}",
+    "FRONTEND_URL": "${FRONTEND_URL}"
+  },
+  "rootDirectory": "./",
+  "healthCheck": {
+    "enabled": true,
+    "path": "/api/health"
+  }
+}
