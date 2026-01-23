@@ -1,5 +1,5 @@
 {
-  "deploymentType": "static",
+  "deploymentType": "docker",
   "name": "GCash Frontend",
   "description": "Money transfer application frontend UI",
   "ports": [
@@ -8,9 +8,18 @@
       "protocol": "http"
     }
   ],
-  "buildCommand": "cd frontend && npm install && npm run build",
-  "staticFolder": "frontend/dist",
+  "dockerfile": "Dockerfile.frontend",
+  "rootDirectory": ".",
   "environment": {
-    "VITE_API_URL": "http://a8cosos0ogw80cw0skgk0kc8.127.0.0.1.sslip.io:5002/api"
+    "VITE_API_URL": "http://backend:5002/api"
+  },
+  "healthCheck": {
+    "enabled": true,
+    "path": "/",
+    "protocol": "http",
+    "interval": 10,
+    "timeout": 5,
+    "retries": 5,
+    "startPeriod": 20
   }
 }

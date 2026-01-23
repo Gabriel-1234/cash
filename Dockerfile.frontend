@@ -22,12 +22,15 @@ RUN npm run build
 # Install serve for production static serving
 RUN npm install -g serve
 
+# Install curl for health checks
+RUN apk add --no-cache curl
+
 EXPOSE 5173
 
-# Health check
-HEALTHCHECK --interval=10s --timeout=5s --retries=3 --start-period=15s \
-  CMD wget --quiet --tries=1 --spider http://localhost:5173/ || exit 1
+# Health check - using curl instead of wget
+HEALTHCHECK --interval=10s --timeout=5s --retries=5 --start-period=20s \
+  CMD curl -f http://localhost:5173/ || exit 1
 
-# Serve the dist folder
-CMD ["serve", "-s", "dist", "-l", "5173"]
+# Serve the dist folder on all interfaces
+CMD ["serve", "-s", "dist", "-l", "5173", "-u"]
 
