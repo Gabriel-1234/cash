@@ -19,10 +19,12 @@ const sequelize = new Sequelize(
   // process.env.DB_PASSWORD || '',
   
   
-  DB_USER='root',
-  DB_PASSWORD='XHivqtHqYfewwRrfwnUwvitIsfcZyMkA',
-  DB_NAME='railway',
-  {
+  MYSQLUSER='root',
+  MYSQLPASSWORD='XHivqtHqYfewwRrfwnUwvitIsfcZyMkA',
+  MYSQLDATABASE='railway',
+  MYSQLHOST='localhmysql.railway.internalost',
+  MYSQLPORT=3306
+,  {
     host: process.env.DB_HOST || 'localhmysql.railway.internalost',
     port: process.env.DB_PORT || 3306,
     dialect: 'mysql',
