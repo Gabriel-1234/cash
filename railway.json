@@ -1,0 +1,11 @@
+{
+  "build": {
+    "dockerfilePath": "Dockerfile"
+  },
+  "deploy": {
+    "startCommand": "npm start"
+  },
+  "env": {
+    "NODE_ENV": "production"
+  }
+}

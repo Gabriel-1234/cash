@@ -1,0 +1,7 @@
+# Railway deployment
+
+This file is used by Railway to detect and deploy your project. You can customize build and start commands as needed.
+
+# Example environment variables
+# DATABASE_URL=your_database_url
+# API_KEY=your_api_key
