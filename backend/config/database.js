@@ -14,19 +14,12 @@ import path from 'path';
 dotenv.config({ path: path.resolve(process.cwd(), '..', '.env') });
 
 const sequelize = new Sequelize(
-  // process.env.DB_NAME || 'gcashdb',
-  // process.env.DB_USER || 'root',
-  // process.env.DB_PASSWORD || '',
-  
-  
-  MYSQLUSER='root',
-  MYSQLPASSWORD='XHivqtHqYfewwRrfwnUwvitIsfcZyMkA',
-  MYSQLDATABASE='railway',
-  MYSQLHOST='localhmysql.railway.internalost',
-  MYSQLPORT=3306
-,  {
-    host: process.env.DB_HOST || 'localhmysql.railway.internalost',
-    port: process.env.DB_PORT || 3306,
+  'railway', // MYSQLDATABASE
+  'root',    // MYSQLUSER
+  'XHivqtHqYfewwRrfwnUwvitIsfcZyMkA', // MYSQLPASSWORD
+  {
+    host: 'localhmysql.railway.internalost', // MYSQLHOST
+    port: 3306, // MYSQLPORT
     dialect: 'mysql',
     logging: false,
     pool: {
