@@ -7,12 +7,12 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'http://localhost:5002',
+        target: 'https://cash-app-api.up.railway.app:8080',
         changeOrigin: true
       }
     }
   },
   define: {
-    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'http://a8cosos0ogw80cw0skgk0kc8.127.0.0.1.sslip.io:5002/api')
+    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'https://cash-app-api.up.railway.app/api')
   }
 });
