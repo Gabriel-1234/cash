@@ -4,7 +4,6 @@ import { useAuthStore } from '../context/store';
 import { useNotificationStore } from '../context/store';
 import { notificationAPI } from '../utils/api';
 import io from 'socket.io-client';
-import.meta.env;
 import '../styles/layout.css';
 
 export default function UserLayout() {
@@ -58,7 +57,7 @@ export default function UserLayout() {
     fetchNotifications();
 
     // Connect to socket
-    const socket = io(import.meta.env.VITE_SOCKET_URL || 'http://localhost:5002');
+    const socket = io('http://localhost:5002');
     socket.emit('join-user', user?.id);
 
     socket.on('new-notification', (data) => {
