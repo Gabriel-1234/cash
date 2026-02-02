@@ -25,9 +25,9 @@ const httpServer = createServer(app);
 // Allow both common frontend ports for development (5173, 5174)
 // and also read from FRONTEND_URL, API_URL, and API_PRODUCTION_URL env vars if set
 const allowedOrigins = [
+  'https://gpay-ss.netlify.app',
   'http://localhost:5173',
-  'http://localhost:5174',
-  'https://gpay-ss.netlify.app'
+  'http://localhost:5174'
 ];
 
 // Add production URLs from environment variables
@@ -52,15 +52,20 @@ const io = new SocketIOServer(httpServer, {
 setIO(io);
 
 // Middleware
-app.use(cors(
-  {
-  'allowedHeaders': ['sessionId', 'Content-Type'],
-  'exposedHeaders': ['sessionId'],
-  'origin': '*',
-  'methods': 'GET,HEAD,PUT,PATCH,POST,DELETE',
-  'preflightContinue': false
-}
-));
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  allowedHeaders: ['sessionId', 'content-type', 'Authorization'],
+  exposedHeaders: ['sessionId'],
+  origin: allowedOrigins,
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  preflightContinue: false
+}));
 app.use(express.json());
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 

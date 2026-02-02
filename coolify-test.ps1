@@ -42,7 +42,7 @@ Write-Host ""
 Write-Host "Deployment Configuration Summary:" -ForegroundColor Green
 Write-Host "  Backend Port: 5002" -ForegroundColor Cyan
 Write-Host "  Database: MySQL (configured)" -ForegroundColor Cyan
-Write-Host "  Production URL: http://a8cosos0ogw80cw0skgk0kc8.127.0.0.1.sslip.io" -ForegroundColor Cyan
+Write-Host "  Production URL: https://gpay-ss.netlify.app:8080" -ForegroundColor Cyan
 Write-Host ""
 
 Write-Host "✅ Coolify Deployment Test Completed!" -ForegroundColor Green
