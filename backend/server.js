@@ -27,7 +27,7 @@ const httpServer = createServer(app);
 const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
-  'http://a8cosos0ogw80cw0skgk0kc8.127.0.0.1.sslip.io'
+  'https://gpay-ss.netlify.app'
 ];
 
 // Add production URLs from environment variables
