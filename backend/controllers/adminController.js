@@ -61,6 +61,18 @@ export const topupUser = async (req, res) => {
       console.error('SMS failed:', error);
     }
 
+    // Emit socket event to update user balance in real time
+    try {
+      const io = getIO();
+      if (io && userId) {
+        io.to(`user-${userId}`).emit('balance-updated', {
+          userId,
+          balance: parseFloat(user.balance)
+        });
+      }
+    } catch (e) {
+      console.error('Socket emit failed:', e);
+    }
     res.json({
       message: 'Topup successful',
       transaction: { id: transaction.id, transactionId, amount },
