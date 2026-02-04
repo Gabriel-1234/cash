@@ -7,7 +7,7 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'https://cash-app-api.up.railway.app:8080',
+        target: 'https://cash-app-api.up.railway.app',
         changeOrigin: true
       }
     }
