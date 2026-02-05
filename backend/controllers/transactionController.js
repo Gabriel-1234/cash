@@ -437,14 +437,14 @@ export const getUserInfo = async (req, res) => {
     }
 
     res.json({
-      user: {
-        id: user.id,
-        fullName: user.name,
-        phoneNumber: user.phone,
-        balance: parseFloat(user.balance) || 0,
-        email: user.email,
-        userType: user.role
-      }
+      id: user.id,
+      name: user.name,
+      phone: user.phone,
+      balance: parseFloat(user.balance) || 0,
+      email: user.email,
+      role: user.role,
+      isVerified: user.isVerified,
+      isSuspended: user.isSuspended
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
