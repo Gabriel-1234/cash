@@ -15,8 +15,14 @@ import ExchangeRate from '../models/ExchangeRate.js';
 
 export const topupUser = async (req, res) => {
   try {
+
     const { userId, description } = req.body;
     const amount = parseFloat(req.body.amount);
+
+    // Prevent admin from topping up their own account
+    if (parseInt(userId) === parseInt(req.userId)) {
+      return res.status(400).json({ message: 'Admins cannot top up their own account.' });
+    }
 
     const user = await User.findByPk(userId);
     if (!user) {
