@@ -19,7 +19,16 @@ export const requestWithdrawalFromUser = async (req, res) => {
       return res.status(400).json({ message: 'Only agents can request withdrawals' });
     }
 
-    const user = await User.findOne({ where: { phone: userPhone } });
+    // Normalize phone: trim and allow with or without +
+    let normalized = (userPhone || '').trim();
+    let user = await User.findOne({ where: { phone: normalized } });
+    if (!user) {
+      if (normalized.startsWith('+')) {
+        user = await User.findOne({ where: { phone: normalized.replace(/^\+/, '') } });
+      } else {
+        user = await User.findOne({ where: { phone: '+' + normalized } });
+      }
+    }
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
