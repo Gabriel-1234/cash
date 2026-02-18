@@ -1,3 +1,5 @@
+import { getUserOrAgentDetails } from '../controllers/adminController.js';
+router.get('/user-details', adminMiddleware, getUserOrAgentDetails);
 import express from 'express';
 import {
   topupUser,
