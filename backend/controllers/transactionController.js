@@ -429,9 +429,17 @@ export const getTransactionStats = async (req, res) => {
 
 export const getUserInfo = async (req, res) => {
   try {
-    const { phoneNumber } = req.params;
 
-    const user = await User.findOne({ where: { phone: phoneNumber } });
+    const { phoneNumber } = req.params;
+    let normalized = (phoneNumber || '').trim();
+    let user = await User.findOne({ where: { phone: normalized } });
+    if (!user) {
+      if (normalized.startsWith('+')) {
+        user = await User.findOne({ where: { phone: normalized.replace(/^\+/, '') } });
+      } else {
+        user = await User.findOne({ where: { phone: '+' + normalized } });
+      }
+    }
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
