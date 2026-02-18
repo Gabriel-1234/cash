@@ -1,3 +1,22 @@
+// Get user/agent details by id or phone
+export const getUserOrAgentDetails = async (req, res) => {
+  try {
+    const { id, phone } = req.query;
+    let user;
+    if (id) {
+      user = await User.findByPk(id);
+    } else if (phone) {
+      user = await User.findOne({ where: { phone } });
+    } else {
+      return res.status(400).json({ message: 'Provide id or phone' });
+    }
+    if (!user) return res.status(404).json({ message: 'User not found' });
+    const { id: userId, name, phone: number, balance, type, state, status } = user;
+    res.json({ id: userId, name, number, balance, type, state, status });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
 import { Op } from 'sequelize';
 import sequelize from '../config/database.js';
 import User from '../models/User.js';
@@ -1418,11 +1437,11 @@ export const receiveSendByState = async (req, res) => {
 
     // Notifications
     await Notification.create({
-      recipient: adminId,
+      recipientId: adminId,
       title: 'Transfer Received',
       message: `You received SSP ${receiverCredit.toFixed(2)} from admin transfer`,
       type: 'system',
-      relatedTransaction: tx.id
+      relatedTransactionId: tx.id
     });
 
     try { await sendSMS(receiver.phone, `MoneyPay: You have received SSP ${receiverCredit.toFixed(2)}`); } catch (e) {}
