@@ -19,11 +19,16 @@ export const requestWithdrawalFromUser = async (req, res) => {
       return res.status(400).json({ message: 'Only agents can request withdrawals' });
     }
 
+    // DEBUG: Print all user phone numbers and search variants
+    const allUsers = await User.findAll({ attributes: ['id', 'phone'] });
+    console.log('DEBUG: All user phones in DB:', allUsers.map(u => u.phone));
+
     // Robust phone normalization: ignore all non-digit except leading +, try all variants
     let normalized = (userPhone || '').trim();
     let digits = normalized.replace(/(?!^\+)\D/g, '');
     let tries = [normalized, digits, digits.startsWith('211') ? '+' + digits : digits];
     if (digits && !digits.startsWith('211')) tries.push('+211' + digits);
+    console.log('DEBUG: Phone search variants:', tries);
     let user = null;
     for (const variant of tries) {
       user = await User.findOne({ where: { phone: variant } });
