@@ -6,7 +6,18 @@ export const getUserOrAgentDetails = async (req, res) => {
     if (id) {
       user = await User.findByPk(id);
     } else if (phone) {
-      user = await User.findOne({ where: { phone } });
+      // Normalize phone: trim and allow with or without +
+      const normalized = phone.trim();
+      // Try exact match first
+      user = await User.findOne({ where: { phone: normalized } });
+      // If not found, try with/without +
+      if (!user) {
+        if (normalized.startsWith('+')) {
+          user = await User.findOne({ where: { phone: normalized.replace(/^\+/, '') } });
+        } else {
+          user = await User.findOne({ where: { phone: '+' + normalized } });
+        }
+      }
     } else {
       return res.status(400).json({ message: 'Missing phone or id parameter' });
     }
