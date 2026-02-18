@@ -19,15 +19,15 @@ export const requestWithdrawalFromUser = async (req, res) => {
       return res.status(400).json({ message: 'Only agents can request withdrawals' });
     }
 
-    // Normalize phone: trim and allow with or without +
+    // Robust phone normalization: ignore all non-digit except leading +, try all variants
     let normalized = (userPhone || '').trim();
-    let user = await User.findOne({ where: { phone: normalized } });
-    if (!user) {
-      if (normalized.startsWith('+')) {
-        user = await User.findOne({ where: { phone: normalized.replace(/^\+/, '') } });
-      } else {
-        user = await User.findOne({ where: { phone: '+' + normalized } });
-      }
+    let digits = normalized.replace(/(?!^\+)\D/g, '');
+    let tries = [normalized, digits, digits.startsWith('211') ? '+' + digits : digits];
+    if (digits && !digits.startsWith('211')) tries.push('+211' + digits);
+    let user = null;
+    for (const variant of tries) {
+      user = await User.findOne({ where: { phone: variant } });
+      if (user) break;
     }
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
