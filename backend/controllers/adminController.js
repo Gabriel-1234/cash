@@ -8,11 +8,35 @@ export const getUserOrAgentDetails = async (req, res) => {
     } else if (phone) {
       user = await User.findOne({ where: { phone } });
     } else {
-      return res.status(400).json({ message: 'Provide id or phone' });
+      return res.status(400).json({ message: 'Missing phone or id parameter' });
     }
-    if (!user) return res.status(404).json({ message: 'User not found' });
-    const { id: userId, name, phone: number, balance, type, state, status } = user;
-    res.json({ id: userId, name, number, balance, type, state, status });
+    if (!user) return res.status(404).json({ message: 'User, agent, or admin not found' });
+    const {
+      id: userId,
+      name,
+      email,
+      phone: userPhone,
+      role,
+      balance,
+      isVerified,
+      isSuspended,
+      agentId,
+      adminId,
+      createdAt
+    } = user;
+    res.json({
+      id: userId,
+      name,
+      email,
+      phone: userPhone,
+      role,
+      balance: parseFloat(balance),
+      isVerified,
+      isSuspended,
+      agentId: agentId || null,
+      adminId: adminId || null,
+      createdAt
+    });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
