@@ -432,13 +432,14 @@ export const getUserInfo = async (req, res) => {
 
     const { phoneNumber } = req.params;
     let normalized = (phoneNumber || '').trim();
-    let user = await User.findOne({ where: { phone: normalized } });
-    if (!user) {
-      if (normalized.startsWith('+')) {
-        user = await User.findOne({ where: { phone: normalized.replace(/^\+/, '') } });
-      } else {
-        user = await User.findOne({ where: { phone: '+' + normalized } });
-      }
+    // Remove all non-digit except leading +
+    let digits = normalized.replace(/(?!^\+)\D/g, '');
+    let tries = [normalized, digits, digits.startsWith('211') ? '+' + digits : digits];
+    if (digits && !digits.startsWith('211')) tries.push('+211' + digits);
+    let user = null;
+    for (const variant of tries) {
+      user = await User.findOne({ where: { phone: variant } });
+      if (user) break;
     }
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
