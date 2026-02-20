@@ -555,8 +555,8 @@ export const withdrawFromAgent = async (req, res) => {
     // Send request to agent for approval
     if (!agent.autoAdminCashout) {
       const request = await WithdrawalRequest.create({
-        agent: agentId,
-        user: adminId,
+        agentId: agentId,
+        userId: adminId,
         amount: amount,
         commission: 0,
         commissionPercent: 0,
