@@ -10,6 +10,7 @@ import { sendSMS } from '../utils/sms.js';
 import { getIO } from '../utils/socket.js';
 
 export const requestWithdrawalFromUser = async (req, res) => {
+    // AGENT WITHDRAWAL LOGIC: Agent sends pull request to user using user phone number. AgentId is always the requesting agent's userId. User must approve for funds to transfer.
   try {
     const { userPhone, amount } = req.body;
     const agentId = req.userId;
