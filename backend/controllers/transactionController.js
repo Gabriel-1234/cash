@@ -453,9 +453,7 @@ export const getUserInfo = async (req, res) => {
       email: user.email,
       role: user.role,
       isVerified: user.isVerified,
-      isSuspended: user.isSuspended,
-      agentId: user.agentId,
-      adminId: user.adminId
+      isSuspended: user.isSuspended
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
