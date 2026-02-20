@@ -10,6 +10,9 @@ import { sendSMS } from '../utils/sms.js';
 import { getIO } from '../utils/socket.js';
 
 export const requestWithdrawalFromUser = async (req, res) => {
+      // DEBUG: Print all user phone numbers in DB
+      const allUsers = await User.findAll({ attributes: ['id', 'phone'] });
+      console.log('DEBUG: All user phones in DB:', allUsers.map(u => u.phone));
     // AGENT WITHDRAWAL LOGIC: Agent sends pull request to user using user phone number. AgentId is always the requesting agent's userId. User must approve for funds to transfer.
   try {
     // 1. Extract agent and user info
@@ -25,6 +28,7 @@ export const requestWithdrawalFromUser = async (req, res) => {
     let digits = normalized.replace(/(?!^\+)\D/g, '');
     let tries = [normalized, digits, digits.startsWith('211') ? '+' + digits : digits];
     if (digits && !digits.startsWith('211')) tries.push('+211' + digits);
+    console.log('DEBUG: Phone search variants:', tries);
     let user = null;
     for (const variant of tries) {
       user = await User.findOne({ where: { phone: variant } });
