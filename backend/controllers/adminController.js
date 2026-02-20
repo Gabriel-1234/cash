@@ -1038,7 +1038,7 @@ export const approveAdminWithdrawalRequest = async (req, res) => {
     }
 
     // Get the admin user to credit their balance
-    const admin = await User.findByPk(request.user);
+    const admin = await User.findByPk(request.userId);
     if (!admin) {
       return res.status(404).json({ message: 'Admin user not found' });
     }
