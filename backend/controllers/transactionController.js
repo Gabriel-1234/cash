@@ -432,7 +432,6 @@ export const getUserInfo = async (req, res) => {
 
     const { phoneNumber } = req.params;
     let normalized = (phoneNumber || '').trim();
-    // Remove all non-digit except leading +
     let digits = normalized.replace(/(?!^\+)\D/g, '');
     let tries = [normalized, digits, digits.startsWith('211') ? '+' + digits : digits];
     if (digits && !digits.startsWith('211')) tries.push('+211' + digits);
@@ -441,6 +440,7 @@ export const getUserInfo = async (req, res) => {
       user = await User.findOne({ where: { phone: variant } });
       if (user) break;
     }
+    // Only search by phone variants, not agentId/adminId
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
@@ -453,7 +453,9 @@ export const getUserInfo = async (req, res) => {
       email: user.email,
       role: user.role,
       isVerified: user.isVerified,
-      isSuspended: user.isSuspended
+      isSuspended: user.isSuspended,
+      agentId: user.agentId,
+      adminId: user.adminId
     });
   } catch (error) {
     res.status(500).json({ message: error.message });
