@@ -1003,7 +1003,7 @@ export const approveAdminWithdrawalRequest = async (req, res) => {
       return res.status(404).json({ message: 'Request not found' });
     }
 
-    if (request.agent.toString() !== agentId) {
+    if (request.agentId.toString() !== agentId.toString()) {
       return res.status(403).json({ message: 'Only the agent can approve their withdrawal' });
     }
 
@@ -1059,7 +1059,7 @@ export const approveAdminWithdrawalRequest = async (req, res) => {
     const transaction = await Transaction.create({
       transactionId,
       senderId: agentId,
-      receiverId: request.user,
+      receiverId: request.userId,
       amount: parsedAmount,
       type: 'agent_cash_out_money',
       status: 'completed',
@@ -1100,8 +1100,8 @@ export const approveAdminWithdrawalRequest = async (req, res) => {
           balance: parseFloat(agent.balance)
         });
 
-        io.to(`user-${request.user}`).emit('balance-updated', {
-          userId: request.user,
+        io.to(`user-${request.userId}`).emit('balance-updated', {
+          userId: request.userId,
           balance: parseFloat(admin.balance)
         });
 
@@ -1136,7 +1136,7 @@ export const rejectAdminWithdrawalRequest = async (req, res) => {
       return res.status(404).json({ message: 'Request not found' });
     }
 
-    if (request.agent.toString() !== agentId) {
+    if (request.agentId.toString() !== agentId.toString()) {
       return res.status(403).json({ message: 'Only the agent can reject their withdrawal' });
     }
 
@@ -1161,8 +1161,8 @@ export const rejectAdminWithdrawalRequest = async (req, res) => {
     try {
       const io = getIO();
       if (io) {
-        io.to(`user-${request.user}`).emit('new-notification', {
-          recipient: request.user,
+        io.to(`user-${request.userId}`).emit('new-notification', {
+          recipient: request.userId,
           title: 'Withdrawal Request Rejected',
           message: `Agent rejected your withdrawal request of SSP ${request.amount}`,
           type: 'system'
