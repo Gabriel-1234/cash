@@ -522,6 +522,9 @@ export const withdrawFromUser = async (req, res) => {
 
 export const withdrawFromAgent = async (req, res) => {
   try {
+    console.log('POST /api/admin/withdraw-from-agent called');
+    console.log('Request body:', req.body);
+    console.log('Request userId:', req.userId);
     const { agentId, description } = req.body;
     const amount = parseFloat(req.body.amount);
     const adminId = req.userId;
