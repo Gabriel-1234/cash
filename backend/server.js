@@ -6,6 +6,7 @@ import path from 'path';
 import { createServer } from 'http';
 import { Server as SocketIOServer } from 'socket.io';
 import { setIO } from './utils/socket.js';
+import { ensureProfileImageColumnIsLongText } from './utils/migrateSchema.js';
 
 // Load .env from project root
 dotenv.config({ path: path.resolve(process.cwd(), '..', '.env') });
@@ -84,12 +85,23 @@ app.options('*', cors({
 }));
 
 
-app.use(express.json());
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ 
+  limit: '100mb',
+  parameterLimit: 50000
+}));
+app.use(express.urlencoded({ 
+  limit: '100mb', 
+  extended: true,
+  parameterLimit: 50000
+}));
 
-// Test Sequelize connection
+// Test Sequelize connection and run migrations
 sequelize.authenticate()
-  .then(() => console.log('MySQL connected via Sequelize'))
+  .then(async () => {
+    console.log('MySQL connected via Sequelize');
+    // Automatically ensure profileImage column is LONGTEXT
+    await ensureProfileImageColumnIsLongText();
+  })
   .catch(err => console.error('Sequelize connection error:', err));
 
 // Import models to set up associations
