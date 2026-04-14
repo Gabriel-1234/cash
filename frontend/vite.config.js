@@ -7,12 +7,12 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
-        target: 'https://cash-app-api.up.railway.app',
+        target: 'https://cash-app-apis.up.railway.app',
         changeOrigin: true
       }
     }
   },
   define: {
-    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'https://cash-app-api.up.railway.app/api')
+    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || 'https://cash-app-apis.up.railway.app/api')
   }
 });
